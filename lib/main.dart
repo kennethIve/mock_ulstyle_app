@@ -4,7 +4,6 @@ import 'package:flutter/scheduler.dart';
 import 'package:mock_back_home/component/bottomMenu.dart';
 import 'package:mock_back_home/model/providerModels.dart';
 import 'package:mock_back_home/pages/mainPage.dart';
-import 'package:mock_back_home/pages/page1.dart';
 import 'package:mock_back_home/pages/view_archive.dart';
 import 'package:provider/provider.dart';
 
@@ -13,11 +12,19 @@ import 'global.dart';
 void main() {
   runApp(MultiProvider(
     providers: [
-      ChangeNotifierProvider<BottomMenuState>(create: (_) => BottomMenuState())
+      ChangeNotifierProvider<BottomMenuState>(create: (_) => BottomMenuState()),
+      Provider<BottomMenuObserver>(
+        create: (_) => new BottomMenuObserver(),
+      ),
+      ChangeNotifierProvider<TabController>(
+          create: (_) => TabController(
+              initialIndex: 0, length: tabName.length, vsync: MyTicker())),
     ],
     child: MyApp(),
   ));
 }
+
+//final RouteObserver<PageRoute> routeObserver = new RouteObserver();
 
 class MyApp extends StatelessWidget {
   @override
@@ -42,43 +49,46 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final TabController tabController =
-      new TabController(length: tabName.length, vsync: MyTicker());
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
 
   @override
   Widget build(BuildContext context) {
-    Widget mainPage =
-        new MainPage(tabController: tabController, parentContext: context);
-    Archive archive = new Archive();
-    return Scaffold(
-      body: Navigator(
-        key: _navigatorKey,
-        initialRoute: "/",
-        onGenerateRoute: (settings) {
-          WidgetBuilder builder;
-          switch (settings.name) {
-            case '/':
-              builder = (BuildContext context) => mainPage;
+    TabController tabController = Provider.of<TabController>(context);
 
-              break;
-            case '/archive':
-              builder = (BuildContext context) => archive;
-              break;
-            default:
-              builder = (BuildContext context) => mainPage;
-              break;
-          }
-          return MaterialPageRoute(builder: builder, settings: settings);
-        },
-        observers: [
-          BottomMenuObserver(context),
-        ],
+    Widget mainPage =
+        MainPage(tabController: tabController, parentContext: context);
+
+    BottomMenuObserver routeObserver = Provider.of<BottomMenuObserver>(context);
+
+    Archive archive = new Archive(routeObserver);
+    return Provider<BuildContext>(
+      create: (_) => this.context,
+      child: Scaffold(
+        body: Navigator(
+          key: _navigatorKey,
+          initialRoute: "/",
+          onGenerateRoute: (settings) {
+            WidgetBuilder builder;
+            switch (settings.name) {
+              case '/':
+                builder = (BuildContext context) => mainPage;
+
+                break;
+              case '/archive':
+                builder = (BuildContext context) => archive;
+                break;
+              default:
+                builder = (BuildContext context) => mainPage;
+                break;
+            }
+            return MaterialPageRoute(builder: builder, settings: settings);
+          },
+          observers: [routeObserver],
+        ),
+        //floatingActionButton: BottomMenu(_navigatorKey),
+        floatingActionButton: BottomMenu(_navigatorKey),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       ),
-      //floatingActionButton: BottomMenu(_navigatorKey),
-      floatingActionButton: Consumer<BottomMenuState>(
-          builder: (context, model, child) => new BottomMenu(_navigatorKey)),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 }
@@ -91,39 +101,58 @@ class MyTicker extends TickerProvider {
 }
 
 class BottomMenuObserver extends NavigatorObserver {
-  final BuildContext context;
-
-  BottomMenuObserver(this.context);
-
+  bool _isPopped = false;
   @override
   void didPop(Route route, Route previousRoute) {
-    super.didPop(route, previousRoute);
+    // TODO: implement didPop
+    //super.didPop(route, previousRoute);
+    Provider.of<BottomMenuState>(this.navigator.context, listen: false)
+        .setActivePageToHome();
+    debugPrint("did Pop");
+    _isPopped = true;
   }
 
   @override
   void didPush(Route route, Route previousRoute) {
-    super.didPush(route, previousRoute);
+    // TODO: implement didPush
+    debugPrint("did push");
   }
 
   @override
   void didRemove(Route route, Route previousRoute) {
-    print("remove");
-    super.didRemove(route, previousRoute);
+    // TODO: implement didRemove
+    Provider.of<BottomMenuState>(this.navigator.context, listen: false)
+        .setActivePageToHome();
+    debugPrint("did didremove");
   }
 
   @override
   void didReplace({Route newRoute, Route oldRoute}) {
-    super.didReplace();
+    // TODO: implement didReplace
+    debugPrint("did replace");
   }
 
   @override
   void didStartUserGesture(Route route, Route previousRoute) {
-    print("start gesture");
-    super.didStartUserGesture(route, previousRoute);
+    // TODO: implement didStartUserGesture
+    //super.didStartUserGesture(route, previousRoute);
+
+    Provider.of<BottomMenuState>(this.navigator.context, listen: false)
+        .setActivePageTo(0);
+    _isPopped = false;
+    debugPrint("did start gesture");
   }
 
   @override
   void didStopUserGesture() {
-    print("end gesture");
+    // TODO: implement didStopUserGesture
+    if (!_isPopped)
+      Provider.of<BottomMenuState>(this.navigator.context, listen: false)
+          .restoreActicePage();
+    debugPrint("did stop gesture: ${navigator.widget}");
   }
+
+  @override
+  // TODO: implement navigator
+  NavigatorState get navigator => super.navigator;
 }

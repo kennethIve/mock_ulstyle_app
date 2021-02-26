@@ -21,8 +21,8 @@ Widget MyAppBar({tabController: TabController, context: BuildContext}) {
                 ),
                 onPressed: () {}),
             Expanded(
-              flex: 1,
-              child: SizedBox(
+              child: Container(
+                color: Colors.grey.withOpacity(0.2),
                 height: 30,
                 child: TextField(
                   decoration: roundTextField,

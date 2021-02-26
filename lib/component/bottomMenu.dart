@@ -1,10 +1,13 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mock_back_home/global.dart';
+import 'package:mock_back_home/main.dart';
 import 'package:mock_back_home/model/providerModels.dart';
 import 'package:provider/provider.dart';
 
 class BottomMenu extends StatefulWidget {
   final GlobalKey<NavigatorState> _navigatorKey;
+
   const BottomMenu(this._navigatorKey);
 
   @override
@@ -12,65 +15,65 @@ class BottomMenu extends StatefulWidget {
 }
 
 class _BottomMenuState extends State<BottomMenu> {
+  final double radius = 45;
   BottomMenuState state;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    print("did change");
+    //debugPrint("BottomMenu: didChangeDependencies");
   }
 
   @override
   Widget build(BuildContext context) {
     NavigatorState navigatorState = widget._navigatorKey.currentState;
     state = Provider.of<BottomMenuState>(context);
-    print("BottomMenu rebuiilded");
-    return Container(
-      child: Container(
-          child: ToggleButtons(
-        fillColor: Color(0xFF6200EE).withOpacity(0.08),
-        splashColor: Color(0xFF6200EE).withOpacity(0.12),
-        hoverColor: Color(0xFF6200EE).withOpacity(0.9),
-        borderRadius: BorderRadius.circular(90.0),
-        isSelected: state.isSelected,
-        onPressed: (index) {
-          if (!state.isSelected[index]) {
-            state.setActivePageTo(index);
-            String url;
-            print("menu pressed: ${state.toString()}");
-            switch (index) {
-              case 0:
-                {
-                  url = "/";
-                  navigatorState.popUntil(ModalRoute.withName(url));
-                  //navigatorState.popAndPushNamed(url);
-                  state.pageCount = 0;
-                  return;
-                }
-                break;
-              case 1:
-                {
-                  url = "/archive";
-                }
-                break;
-              case 2:
-                {
-                  url = "/archive";
-                }
-                break;
-            }
-            (state.pageCount == 0)
-                ? navigatorState.pushNamed(url, arguments: () {})
-                : navigatorState.pushReplacementNamed(url, arguments: () {});
-            state.pageCount++;
-          }
-        },
-        children: [
-          Icon(Icons.favorite),
-          Icon(Icons.visibility),
-          Icon(Icons.notifications),
-        ],
-      )),
+
+    //debugPrint("BottomMenu rebuiilded");
+    return Stack(
+      children: [
+        ClipRRect(
+          borderRadius: BorderRadius.all(Radius.circular(radius)),
+          child: Container(
+              width: 300,
+              child: BottomNavigationBar(
+                type: BottomNavigationBarType.fixed,
+                selectedItemColor: Colors.blue,
+                unselectedItemColor: Colors.grey,
+                enableFeedback: false,
+                showUnselectedLabels: true,
+                unselectedFontSize: 14,
+                currentIndex: state.index,
+                onTap: (int index) {
+                  if (index == state.index) return;
+                  if (index == 0) {
+                    navigatorState
+                        .popUntil(ModalRoute.withName(routeList[index]));
+                    state.setActivePageToHome();
+                  } else {
+                    if (state.pageCount > 0)
+                      navigatorState.pushReplacementNamed(routeList[index]);
+                    else
+                      navigatorState.pushNamed(routeList[index]);
+                    state.setActivePageTo(index);
+                  }
+                },
+                items: [
+                  BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.home), label: "首頁"),
+                  BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.play_rectangle_fill),
+                      label: "U TV"),
+                  BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.underline), label: "U Jetso"),
+                  BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.square_grid_2x2), label: "小幫手"),
+                  BottomNavigationBarItem(
+                      icon: Icon(CupertinoIcons.bookmark_fill), label: "收藏夾"),
+                ],
+              )),
+        )
+      ],
     );
   }
 }

@@ -35,6 +35,14 @@ enum PageName {
   archive,
 }
 
+List<String> routeList = [
+  "/", //home route
+  "/archive",
+  "/archive",
+  "/archive",
+  "/archive",
+];
+
 List<String> tabName = <String>[
   "最新",
   "熱門",

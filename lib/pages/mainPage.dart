@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mock_back_home/component/myAppbar.dart';
-import 'package:mock_back_home/pages/page1.dart';
+import 'package:mock_back_home/pages/tabPage.dart';
 
 import '../global.dart';
 

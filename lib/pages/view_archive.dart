@@ -1,16 +1,21 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:mock_back_home/main.dart';
 import 'package:mock_back_home/model/providerModels.dart';
 import 'package:provider/provider.dart';
 
 class Archive extends StatefulWidget {
+  final NavigatorObserver routeObserver;
+
+  const Archive(this.routeObserver);
+
   //const Archive();
 
   @override
   _ArchiveState createState() => _ArchiveState();
 }
 
-class _ArchiveState extends State<Archive> {
+class _ArchiveState extends State<Archive> implements BottomMenuObserver {
   Function callback;
 
   @override
@@ -19,42 +24,65 @@ class _ArchiveState extends State<Archive> {
   }
 
   @override
-  void didUpdateWidget(covariant Archive oldWidget) {
-    super.didUpdateWidget(oldWidget);
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    //widget.routeObserver.subscribe(this, ModalRoute.of(context));
   }
 
   @override
-  void didChangeDependencies() {
-    super.didChangeDependencies();
+  void didPop(route, previousRoute) {
+    debugPrint("Archive Popped");
+    Provider.of<BottomMenuState>(context, listen: false).setActivePageToHome();
+  }
+
+  @override
+  void didStartUserGesture(Route<dynamic> route, Route<dynamic> previousRoute) {
+    debugPrint("getturestart");
   }
 
   @override
   void deactivate() {
-    Provider.of<BottomMenuState>(context, listen: false).setActivePageTo(0);
     super.deactivate();
+    //Provider.of<BottomMenuState>(context, listen: false).setActivePageToHome();
   }
 
   @override
   void dispose() {
+    //widget.routeObserver.unsubscribe(this);
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    Widget pop = WillPopScope(
-      onWillPop: () async {
-        return true;
-      },
-      child: Text("data"),
-    );
-    //callback = ModalRoute.of(context).settings.arguments;
     return Scaffold(
       appBar: AppBar(
         title: Text("我的收藏"),
-        leading: CupertinoButton(
-            child: Icon(Icons.arrow_back_ios_outlined), onPressed: () {}),
       ),
       body: null,
     );
   }
+
+  @override
+  void didPush(Route route, Route previousRoute) {
+    // TODO: implement didPush
+  }
+
+  @override
+  void didRemove(Route route, Route previousRoute) {
+    // TODO: implement didRemove
+  }
+
+  @override
+  void didReplace({Route newRoute, Route oldRoute}) {
+    // TODO: implement didReplace
+  }
+
+  @override
+  void didStopUserGesture() {
+    // TODO: implement didStopUserGesture
+  }
+
+  @override
+  // TODO: implement navigator
+  NavigatorState get navigator => throw UnimplementedError();
 }
