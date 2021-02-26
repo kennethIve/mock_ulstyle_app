@@ -14,6 +14,7 @@ class MyPage extends StatefulWidget {
 class _MyPageState extends State<MyPage> {
   ScrollController _controller = new ScrollController();
   Random random = new Random();
+
   @override
   void initState() {
     super.initState();
@@ -33,44 +34,27 @@ class _MyPageState extends State<MyPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Container(
-        child: CustomRefresh(
+        child: CustomScrollView(
+      controller: _controller,
+      physics: BouncingScrollPhysics(parent: AlwaysScrollableScrollPhysics()),
+      slivers: <Widget>[
+        CupertinoSliverRefreshControl(
           onRefresh: () async {
             await Future.delayed(const Duration(seconds: 1));
-            //setState(() {});
+            setState(() {});
           },
-          color: Colors.grey,
-          child: ListView.builder(
-              physics: AlwaysScrollableScrollPhysics(),
-              controller: _controller,
-              itemCount: random.nextInt(40),
-              itemBuilder: (context, index) {
-                return ListTile(
-                  title: Text("ListTile no.$index"),
-                );
-              }),
         ),
-      ),
-    );
-  }
-}
-
-class CustomRefresh extends RefreshIndicator {
-  final String name = "custom refresh";
-
-  CustomRefresh(
-      {Future<Null> Function() onRefresh, MaterialColor color, ListView child})
-      : super(onRefresh: onRefresh, child: child, color: color) {}
-
-  @override
-  CustomRefreshState createState() => CustomRefreshState();
-}
-
-class CustomRefreshState extends RefreshIndicatorState {
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [widget.child],
-    );
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (BuildContext context, int index) {
+              return ListTile(
+                title: Text("ListTile no.$index"),
+              );
+            },
+            childCount: random.nextInt(15),
+          ),
+        ),
+      ],
+    ));
   }
 }

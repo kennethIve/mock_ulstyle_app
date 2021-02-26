@@ -5,6 +5,7 @@ var global_theme = new ThemeData(
     primaryColor: Colors.white,
     accentColor: Colors.red,
     scaffoldBackgroundColor: Colors.white,
+    //textTheme: TextTheme(title: TextStyle()),
     iconTheme: IconThemeData(color: Colors.blue, size: 20));
 
 const roundBorder = OutlineInputBorder(
@@ -33,3 +34,21 @@ enum PageName {
   dontKnow,
   archive,
 }
+
+List<String> tabName = <String>[
+  "最新",
+  "熱門",
+  "TV",
+  "著數",
+  "美食",
+  "女生",
+  "好去處",
+  "娛樂",
+  "食譜",
+  "熱爆話題",
+  "網購",
+  "生活",
+  "旅遊",
+  "科技玩物",
+  "Blog"
+];

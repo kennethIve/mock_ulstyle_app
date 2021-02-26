@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mock_back_home/component/mySearchDele.dart';
 import 'package:mock_back_home/global.dart';
-import 'package:mock_back_home/main.dart';
+import 'package:mock_back_home/pages/tabMenu.dart';
 
 // ignore: non_constant_identifier_names
 Widget MyAppBar({tabController: TabController, context: BuildContext}) {
@@ -29,6 +29,7 @@ Widget MyAppBar({tabController: TabController, context: BuildContext}) {
                   readOnly: true,
                   onTap: () {
                     showSearch(context: context, delegate: MySearchDele());
+                    //Navigator.push(context, MySearchDele());
                   },
                 ),
               ),
@@ -42,30 +43,30 @@ Widget MyAppBar({tabController: TabController, context: BuildContext}) {
           child: Row(
             children: [
               IconButton(
+                  //hide the onpress animation of icon button
+                  splashColor: Colors.transparent,
+                  highlightColor: Colors.transparent,
+                  hoverColor: Colors.transparent,
                   icon: Icon(
                     Icons.menu,
                   ),
-                  onPressed: () {}),
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => TabMenu(tabController),
+                            fullscreenDialog: true));
+                  }),
               Expanded(
                   child: TabBar(
                 controller: tabController,
+                indicatorColor: Colors.black,
                 isScrollable: true,
-                tabs: [
-                  Tab(
-                    text: "Page 1",
-                  ),
-                  Tab(
-                    text: "Page 2",
-                  ),
-                  Tab(
-                    text: "Page 3",
-                  ),
-                  Tab(
-                    text: "Page 4",
-                  ),
-                  Tab(
-                    text: "Page 5",
-                  ),
+                tabs: <Widget>[
+                  for (String element in tabName)
+                    Tab(
+                      text: element,
+                    )
                 ],
               )),
             ],
