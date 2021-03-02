@@ -4,16 +4,24 @@ import 'package:flutter/material.dart';
 var global_theme = new ThemeData(
     primaryColor: Colors.white,
     accentColor: Colors.red,
+    tabBarTheme: TabBarTheme(
+        labelPadding: EdgeInsets.symmetric(
+          horizontal: 8,
+        ),
+        labelStyle: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+        unselectedLabelStyle: TextStyle(fontSize: 15),
+        indicatorSize: TabBarIndicatorSize.label,
+        unselectedLabelColor: Colors.grey),
+    indicatorColor: Colors.black,
     scaffoldBackgroundColor: Colors.white,
-    //textTheme: TextTheme(title: TextStyle()),
-    iconTheme: IconThemeData(color: Colors.blue, size: 20));
+    iconTheme: IconThemeData(color: Colors.grey, size: 33));
 
 const roundBorder = OutlineInputBorder(
   borderRadius: BorderRadius.all(Radius.circular(90)),
-  borderSide: BorderSide(color: Colors.grey),
+  borderSide: BorderSide(color: Colors.transparent),
 );
 
-const roundTextField = InputDecoration(
+final InputDecoration roundTextField = InputDecoration(
   border: roundBorder,
   focusedBorder: roundBorder,
   enabledBorder: roundBorder,
@@ -21,7 +29,8 @@ const roundTextField = InputDecoration(
     Icons.search,
     color: Colors.grey,
   ),
-  fillColor: Colors.grey,
+  fillColor: Colors.grey.withOpacity(0.1),
+  filled: true,
   contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 20),
   hintText: "搜尋 \“Staycation 優惠\”",
   hintStyle: TextStyle(

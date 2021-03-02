@@ -5,6 +5,7 @@ class BottomMenuState extends ChangeNotifier {
   int index = 0;
   int previousIndex = 0;
   int pageCount = 0;
+  bool shownFlag = false;
 
   Future<void> setActivePageTo(page) async {
     isSelected = <bool>[true, false, false, false, false];
@@ -21,6 +22,13 @@ class BottomMenuState extends ChangeNotifier {
     isSelected = <bool>[true, false, false, false, false];
     isSelected[index] = true;
     notifyListeners();
+  }
+
+  Future<void> fadeOut(isShown) async {
+    if (isShown != this.shownFlag) {
+      shownFlag = isShown;
+      notifyListeners();
+    }
   }
 
   Future<void> restoreActicePage() async {
