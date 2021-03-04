@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
@@ -24,7 +27,16 @@ void main() {
   ));
 }
 
-//final RouteObserver<PageRoute> routeObserver = new RouteObserver();
+//testing firebase messaging
+Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
+  if (message.containsKey('data')) {
+    final dynamic data = message['data'];
+  }
+
+  if (message.containsKey('notification')) {
+    final dynamic notification = message['notification'];
+  }
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -50,6 +62,46 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+
+  @override
+  void initState() {
+    super.initState();
+    if (Platform.isIOS) {
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage: $message");
+        },
+        //onBackgroundMessage: myBackgroundMessageHandler,
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+        },
+      );
+      _firebaseMessaging.requestNotificationPermissions(
+        IosNotificationSettings(sound: true, badge: true, alert: true),
+      );
+    }
+    if (Platform.isAndroid) {
+      _firebaseMessaging.getToken().then((token) {
+        print("Firebase Token: $token");
+      });
+      _firebaseMessaging.configure(
+        onMessage: (Map<String, dynamic> message) async {
+          print("onMessage: $message");
+        },
+        onBackgroundMessage: myBackgroundMessageHandler,
+        onLaunch: (Map<String, dynamic> message) async {
+          print("onLaunch: $message");
+        },
+        onResume: (Map<String, dynamic> message) async {
+          print("onResume: $message");
+        },
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

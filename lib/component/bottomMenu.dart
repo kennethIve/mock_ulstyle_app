@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:mock_back_home/global.dart';
-import 'package:mock_back_home/main.dart';
 import 'package:mock_back_home/model/providerModels.dart';
 import 'package:provider/provider.dart';
 

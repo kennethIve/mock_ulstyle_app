@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>39814717552-jp69758gfjc2350u61p9nkom2k2p17il.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.39814717552-jp69758gfjc2350u61p9nkom2k2p17il</string>
+	<key>API_KEY</key>
+	<string>AIzaSyDV6ZnWFAywAl57FZpIk5UOnesrCMSifWM</string>
+	<key>GCM_SENDER_ID</key>
+	<string>39814717552</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.example.mockBackHome</string>
+	<key>PROJECT_ID</key>
+	<string>hket-flutter-demo</string>
+	<key>STORAGE_BUCKET</key>
+	<string>hket-flutter-demo.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:39814717552:ios:062f4eb11f1bb0e3a294b5</string>
+</dict>
+</plist>
