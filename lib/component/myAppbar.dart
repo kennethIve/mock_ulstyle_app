@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:mock_back_home/component/mySearchDele.dart';
 import 'package:mock_back_home/global.dart';
-import 'package:mock_back_home/pages/tabMenu.dart';
+import 'package:mock_back_home/pages/tabMenuPage.dart';
 
 // ignore: non_constant_identifier_names
 Widget MyAppBar({tabController: TabController, context: BuildContext}) {
@@ -60,7 +60,7 @@ Widget MyAppBar({tabController: TabController, context: BuildContext}) {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                            builder: (context) => TabMenu(tabController),
+                            builder: (context) => TabMenuPage(tabController),
                             fullscreenDialog: true));
                   }),
               Expanded(

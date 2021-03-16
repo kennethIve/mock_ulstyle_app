@@ -20,13 +20,11 @@ class _BottomMenuState extends State<BottomMenu> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    print("fade in the menu");
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    //debugPrint("BottomMenu: didChangeDependencies");
   }
 
   @override
@@ -36,12 +34,12 @@ class _BottomMenuState extends State<BottomMenu> with TickerProviderStateMixin {
     final animationController =
         AnimationController(duration: Duration(milliseconds: 700), vsync: this);
     final fadeOutOnScrollAnimation =
-        Tween(begin: 1.0, end: .0).animate(animationController);
+        Tween(begin: 1.0, end: 0.0).animate(animationController);
 
     debugPrint("BottomMenu rebuiilded");
     (state.shownFlag)
-        ? animationController.forward()
-        : animationController.reverse();
+        ? animationController.reverse()
+        : animationController.forward();
     return FadeTransition(
       opacity: fadeOutOnScrollAnimation,
       child: Stack(

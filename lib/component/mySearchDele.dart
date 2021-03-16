@@ -19,22 +19,16 @@ class MySearchDele extends SearchDelegate {
 
   @override
   Widget buildLeading(BuildContext context) {
-    // TODO: implement buildLeading
-    //throw UnimplementedError();
     return Icon(Icons.search_rounded);
   }
 
   @override
   Widget buildResults(BuildContext context) {
-    // TODO: implement buildResults
-    //throw UnimplementedError();
     return Icon(Icons.search_rounded);
   }
 
   @override
   Widget buildSuggestions(BuildContext context) {
-    // TODO: implement buildSuggestions
-    //throw UnimplementedError();
     if (this.query.isEmpty)
       return Container(
         padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),

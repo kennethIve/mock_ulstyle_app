@@ -63,26 +63,17 @@ class _ArchiveState extends State<Archive> implements BottomMenuObserver {
   }
 
   @override
-  void didPush(Route route, Route previousRoute) {
-    // TODO: implement didPush
-  }
+  void didPush(Route route, Route previousRoute) {}
 
   @override
-  void didRemove(Route route, Route previousRoute) {
-    // TODO: implement didRemove
-  }
+  void didRemove(Route route, Route previousRoute) {}
 
   @override
-  void didReplace({Route newRoute, Route oldRoute}) {
-    // TODO: implement didReplace
-  }
+  void didReplace({Route newRoute, Route oldRoute}) {}
 
   @override
-  void didStopUserGesture() {
-    // TODO: implement didStopUserGesture
-  }
+  void didStopUserGesture() {}
 
   @override
-  // TODO: implement navigator
   NavigatorState get navigator => throw UnimplementedError();
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:mock_back_home/global.dart';
 
-class TabMenu extends StatelessWidget {
+class TabMenuPage extends StatelessWidget {
   final double _borderRadius = 10;
   final double _containerHeight = 50;
   final double _fontSize = 20;
   final TabController tabController;
 
-  const TabMenu(this.tabController);
+  const TabMenuPage(this.tabController);
 
   @override
   Widget build(BuildContext context) {

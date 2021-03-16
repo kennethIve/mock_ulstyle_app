@@ -1,12 +1,14 @@
 import 'dart:io';
 
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:mock_back_home/component/bottomMenu.dart';
 import 'package:mock_back_home/model/providerModels.dart';
-import 'package:mock_back_home/pages/mainPage.dart';
+import 'package:mock_back_home/pages/homePage.dart';
+import 'package:mock_back_home/pages/utvPage.dart';
 import 'package:mock_back_home/pages/view_archive.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +19,7 @@ void main() {
     providers: [
       ChangeNotifierProvider<BottomMenuState>(create: (_) => BottomMenuState()),
       Provider<BottomMenuObserver>(
-        create: (_) => new BottomMenuObserver(),
+        create: (_) => BottomMenuObserver(),
       ),
       ChangeNotifierProvider<TabController>(
           create: (_) => TabController(
@@ -30,10 +32,11 @@ void main() {
 //testing firebase messaging
 Future<dynamic> myBackgroundMessageHandler(Map<String, dynamic> message) async {
   if (message.containsKey('data')) {
+    // ignore: unused_local_variable
     final dynamic data = message['data'];
   }
-
   if (message.containsKey('notification')) {
+    // ignore: unused_local_variable
     final dynamic notification = message['notification'];
   }
 }
@@ -106,13 +109,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   Widget build(BuildContext context) {
     TabController tabController = Provider.of<TabController>(context);
-
-    Widget mainPage =
-        MainPage(tabController: tabController, parentContext: context);
-
     BottomMenuObserver routeObserver = Provider.of<BottomMenuObserver>(context);
-
-    Archive archive = new Archive(routeObserver);
     return Provider<BuildContext>(
       create: (_) => this.context,
       child: Scaffold(
@@ -123,17 +120,27 @@ class _MyHomePageState extends State<MyHomePage> {
             WidgetBuilder builder;
             switch (settings.name) {
               case '/':
-                builder = (BuildContext context) => mainPage;
-
+                builder = (BuildContext context) => HomePage(
+                    tabController: tabController, parentContext: context);
                 break;
+              case '/utv':
+                builder = (BuildContext context) => UTVPage();
+                break;
+              // case '/jetso':
+              //   builder = (BuildContext context) => UTVPage();
+              //   break;
+              // case '/helper':
+              //   builder = (BuildContext context) => UTVPage();
+              //   break;
               case '/archive':
-                builder = (BuildContext context) => archive;
+                builder = (BuildContext context) => Archive(routeObserver);
                 break;
               default:
-                builder = (BuildContext context) => mainPage;
+                builder = (BuildContext context) => HomePage(
+                    tabController: tabController, parentContext: context);
                 break;
             }
-            return MaterialPageRoute(builder: builder, settings: settings);
+            return CupertinoPageRoute(builder: builder, settings: settings);
           },
           observers: [routeObserver],
         ),
@@ -156,8 +163,6 @@ class BottomMenuObserver extends NavigatorObserver {
   bool _isPopped = false;
   @override
   void didPop(Route route, Route previousRoute) {
-    // TODO: implement didPop
-    //super.didPop(route, previousRoute);
     Provider.of<BottomMenuState>(this.navigator.context, listen: false)
         .setActivePageToHome();
     debugPrint("did Pop");
@@ -165,30 +170,14 @@ class BottomMenuObserver extends NavigatorObserver {
   }
 
   @override
-  void didPush(Route route, Route previousRoute) {
-    // TODO: implement didPush
-    debugPrint("did push");
-  }
-
-  @override
   void didRemove(Route route, Route previousRoute) {
-    // TODO: implement didRemove
     Provider.of<BottomMenuState>(this.navigator.context, listen: false)
         .setActivePageToHome();
     debugPrint("did didremove");
   }
 
   @override
-  void didReplace({Route newRoute, Route oldRoute}) {
-    // TODO: implement didReplace
-    debugPrint("did replace");
-  }
-
-  @override
   void didStartUserGesture(Route route, Route previousRoute) {
-    // TODO: implement didStartUserGesture
-    //super.didStartUserGesture(route, previousRoute);
-
     Provider.of<BottomMenuState>(this.navigator.context, listen: false)
         .setActivePageTo(0);
     _isPopped = false;
@@ -197,7 +186,6 @@ class BottomMenuObserver extends NavigatorObserver {
 
   @override
   void didStopUserGesture() {
-    // TODO: implement didStopUserGesture
     if (!_isPopped)
       Provider.of<BottomMenuState>(this.navigator.context, listen: false)
           .restoreActicePage();
@@ -205,6 +193,5 @@ class BottomMenuObserver extends NavigatorObserver {
   }
 
   @override
-  // TODO: implement navigator
   NavigatorState get navigator => super.navigator;
 }

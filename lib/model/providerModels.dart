@@ -5,7 +5,7 @@ class BottomMenuState extends ChangeNotifier {
   int index = 0;
   int previousIndex = 0;
   int pageCount = 0;
-  bool shownFlag = false;
+  bool shownFlag = true;
 
   Future<void> setActivePageTo(page) async {
     isSelected = <bool>[true, false, false, false, false];
@@ -13,6 +13,7 @@ class BottomMenuState extends ChangeNotifier {
     previousIndex = index;
     index = page;
     pageCount++;
+    shownFlag = true;
     notifyListeners();
   }
 
@@ -21,6 +22,7 @@ class BottomMenuState extends ChangeNotifier {
     pageCount = 0;
     isSelected = <bool>[true, false, false, false, false];
     isSelected[index] = true;
+    shownFlag = true;
     notifyListeners();
   }
 
@@ -49,10 +51,4 @@ class BottomMenuState extends ChangeNotifier {
   String toString() {
     return "isSelected:$isSelected  index:$index _pageCount:$pageCount";
   }
-}
-
-class TabModel {
-  TabController tabController;
-
-  TabModel();
 }

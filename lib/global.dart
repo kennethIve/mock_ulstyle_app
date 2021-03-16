@@ -46,9 +46,9 @@ enum PageName {
 
 List<String> routeList = [
   "/", //home route
-  "/archive",
-  "/archive",
-  "/archive",
+  "/utv",
+  "/jetso",
+  "/helper",
   "/archive",
 ];
 

@@ -4,18 +4,18 @@ import 'package:mock_back_home/pages/tabPage.dart';
 
 import '../global.dart';
 
-class MainPage extends StatefulWidget {
+class HomePage extends StatefulWidget {
   final tabController;
   final parentContext;
 
-  const MainPage({Key key, this.tabController, BuildContext this.parentContext})
+  const HomePage({Key key, this.tabController, BuildContext this.parentContext})
       : super(key: key);
 
   @override
-  _MainPageState createState() => _MainPageState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _MainPageState extends State<MainPage> {
+class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

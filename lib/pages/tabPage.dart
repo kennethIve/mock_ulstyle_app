@@ -1,9 +1,12 @@
 import 'dart:math';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
+import 'package:mock_back_home/controller/ufoodApi.dart';
 import 'package:mock_back_home/model/providerModels.dart';
+import 'package:mock_back_home/model/xml2jsonModel.dart';
 import 'package:provider/provider.dart';
 
 import 'ContentPage.dart';
@@ -17,35 +20,60 @@ class MyPage extends StatefulWidget {
 }
 
 class _MyPageState extends State<MyPage> {
-  ScrollController _controller = new ScrollController();
+  ScrollController _controller;
   Random random = new Random();
+  BottomMenuState bottomMenuState;
+  List<Article> contentList = [];
 
   @override
   void initState() {
     super.initState();
+    _getContentList();
+    _controller = ScrollController();
     _controller.addListener(() {
       //print(_controller.offset);
+      if (!_controller.keepScrollOffset) {
+        Future.delayed(Duration(seconds: 2));
+        print("is stop for 2 seconds");
+        bottomMenuState.fadeOut(false);
+      }
+    });
+  }
+
+  _getContentList() {
+    UFoodAPi().getFoodNews().then((result) {
+      contentList = result;
+      setState(() {});
     });
   }
 
   @override
+  void deactivate() {
+    print("homepage dispose");
+    super.deactivate();
+  }
+
+  @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+    bottomMenuState = Provider.of<BottomMenuState>(context, listen: false);
     return Container(
         child: NotificationListener<ScrollNotification>(
       onNotification: (ScrollNotification notification) {
         if (notification is UserScrollNotification) {
           if (notification.direction == ScrollDirection.reverse) {
             print("fade in menu");
-            Provider.of<BottomMenuState>(context, listen: false).fadeOut(true);
+            bottomMenuState.fadeOut(false);
           } else if (notification.direction == ScrollDirection.forward) {
-            Provider.of<BottomMenuState>(context, listen: false).fadeOut(false);
+            bottomMenuState.fadeOut(true);
           }
+        } else if (notification is ScrollEndNotification) {
+          bottomMenuState.fadeOut(true);
         }
         return true;
       },
@@ -55,18 +83,21 @@ class _MyPageState extends State<MyPage> {
         slivers: <Widget>[
           CupertinoSliverRefreshControl(
             onRefresh: () async {
-              await Future.delayed(const Duration(seconds: 1));
+              contentList = await UFoodAPi().getFoodNews();
               setState(() {});
             },
           ),
           SliverList(
             delegate: SliverChildBuilderDelegate(
               (BuildContext context, int index) {
-                return UfoodContent(widget.title);
+                Article article = contentList[index];
+                return UfoodContent(
+                    article, "${article.title} ", article.thumbnail);
               },
-              childCount: random.nextInt(15) + 5,
+              childCount: contentList.length,
             ),
           ),
+          SliverPadding(padding: EdgeInsets.all(35))
         ],
       ),
     ));
@@ -75,9 +106,8 @@ class _MyPageState extends State<MyPage> {
 
 abstract class Content extends StatelessWidget {
   final String appBarTitle;
-  final String url =
-      "https://resource01-proxy.ulifestyle.com.hk/res/v3/image/content/2825000/2829920/element5-digital-WCPg9ROZbM0-unsplash_1024.jpg";
-  const Content(this.appBarTitle);
+  final String url;
+  const Content(this.appBarTitle, this.url);
 
   @override
   Widget build(BuildContext context) {
@@ -122,7 +152,7 @@ abstract class Content extends StatelessWidget {
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               child: Text(
-                "頭髮稀疏可能血氣不足！ 一文睇清脫髮原因＋防脫髮方法＋湯水食療推介",
+                appBarTitle,
                 style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                 softWrap: true,
               ),
@@ -170,5 +200,7 @@ abstract class Content extends StatelessWidget {
 }
 
 class UfoodContent extends Content {
-  const UfoodContent(String appBar) : super(appBar);
+  final Article article;
+  const UfoodContent(Article this.article, String title, String url)
+      : super(title, url);
 }

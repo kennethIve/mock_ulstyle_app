@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mock_back_home/global.dart';
-import 'package:mock_back_home/model/providerModels.dart';
 import 'package:provider/provider.dart';
 
 class ContentDetailPage extends StatefulWidget {
