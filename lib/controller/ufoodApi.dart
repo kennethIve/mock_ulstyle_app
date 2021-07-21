@@ -8,7 +8,7 @@ class UFoodAPi {
   var dio = Dio();
 
   String url =
-      "http://192.168.2.83:8980/internal-api/list?signature-code=ufood&code=502";
+      "http://ulaappelb02-992914890.ap-east-1.elb.amazonaws.com/internal-api/list?signature-code=ufood&code=502";
 
   Future<List<Article>> getFoodNews({int pageIndex = 0, int limit = 8}) async {
     Response resp = await dio.get(url + "&page-index=$pageIndex&limit=$limit");
